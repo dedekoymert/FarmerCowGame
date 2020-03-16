@@ -8,7 +8,7 @@ public class Farmer extends MovingObject<Farmer> {
   private int caughtCowCount = 0;
 
   public Farmer(int row, int column) {
-    super(row, column, Farmer.class, '0');
+    super(row, column, Type.Farmer, '0');
   }
 
   public void increaseCowCaughtCount(){

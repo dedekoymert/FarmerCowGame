@@ -11,8 +11,10 @@ public class TamworthDatabaseImpl implements TamworthDatabase {
   private List<Farmer> farmers = new ArrayList<>();
   private List<Food> foods = new ArrayList<>();
   private List<Obstacle> obstacles = new ArrayList<>();
+  private List<Empty> empties = new ArrayList<>();
 
-  public TamworthDatabaseImpl(){}
+  public TamworthDatabaseImpl() {
+  }
 
   @Override
   public void addFarmer(Farmer farmer) {
@@ -35,6 +37,11 @@ public class TamworthDatabaseImpl implements TamworthDatabase {
   }
 
   @Override
+  public void addEmpty(Empty empty) {
+    empties.add(empty);
+  }
+
+  @Override
   public List<Farmer> getFarmers() {
     return new ArrayList<>(farmers);
   }
@@ -49,9 +56,19 @@ public class TamworthDatabaseImpl implements TamworthDatabase {
     return new ArrayList<>(foods);
   }
 
+  @Override
   public List<Obstacle> getObstacles() {
     return new ArrayList<>(obstacles);
   }
 
+  @Override
+  public List<Empty> getEmpties() {
+    return new ArrayList<>(empties);
+  }
+
+  @Override
+  public void removeFood(int foodId) {
+    foods.removeIf(f -> f.getId() == foodId);
+  }
 
 }

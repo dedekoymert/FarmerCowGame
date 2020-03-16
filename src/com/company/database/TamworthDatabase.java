@@ -14,6 +14,8 @@ public interface TamworthDatabase {
 
   void addObstacle (Obstacle obstacle);
 
+  void addEmpty(Empty empty);
+
   List<Farmer> getFarmers();
 
   List<Cow> getCows();
@@ -22,5 +24,7 @@ public interface TamworthDatabase {
 
   List<Obstacle> getObstacles();
 
+  List<Empty> getEmpties();
 
+  void removeFood(int foodId);
 }

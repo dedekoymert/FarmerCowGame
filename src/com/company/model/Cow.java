@@ -6,7 +6,7 @@ public class Cow extends MovingObject<Cow> {
   private int stomachSize = 3;
 
   public Cow(int row, int column) {
-    super(row, column, Cow.class, 'C');
+    super(row, column, Type.Cow, 'C');
   }
 
   public void eatFood(){

@@ -1,5 +1,5 @@
 package com.company.model;
 
 public enum Type {
-  Cow,Farmer
+  Cow,Farmer,Empty,Food,Obstacle,NonUsable
 }

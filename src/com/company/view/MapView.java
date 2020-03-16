@@ -1,6 +1,5 @@
 package com.company.view;
 
-import com.company.model.Cow;
 import com.company.model.MapObject;
 
 import java.util.List;

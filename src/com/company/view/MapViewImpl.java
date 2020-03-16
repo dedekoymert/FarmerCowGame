@@ -1,7 +1,7 @@
 package com.company.view;
 
-import com.company.model.Cow;
 import com.company.model.MapObject;
+import com.company.model.Type;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,6 @@ public class MapViewImpl implements MapView {
 
   @Override
   public void start() {
-
     if (stop) {
       Scanner input = new Scanner(System.in);
       String goOn = input.next();
@@ -44,7 +43,7 @@ public class MapViewImpl implements MapView {
   public void printMap(Map<Integer, Map<Integer, MapObject>> map) {
     for (int i = 0; i < firstMap.size(); i++) {
       for (int j = 0; j < firstMap.get(i).size(); j++) {
-        if (map.get(i).get(j).getType().equals(Cow.class)) {
+        if (map.get(i).get(j).getType().equals(Type.Cow)) {
           System.out.print(presenter.getCowColor(map.get(i).get(j).getId()));
         } else {
           System.out.print(map.get(i).get(j).getSymbol());

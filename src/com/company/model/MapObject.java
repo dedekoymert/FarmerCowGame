@@ -8,7 +8,7 @@ public interface MapObject<T> {
 
   int getId();
 
-  Class<T> getType();
+  Type getType();
 
   char getSymbol();
 

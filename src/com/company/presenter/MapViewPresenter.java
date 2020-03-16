@@ -39,7 +39,7 @@ public class MapViewPresenter implements MapView.Presenter {
                      .mapToObj(c -> (char) c)
                      .collect(Collectors.toList()));
     }
-    database.getCows().get(0).eatFood();
+
     view.setFirstMap(firstMap);
     placeObstacle();
     placeEmpty();
@@ -49,6 +49,10 @@ public class MapViewPresenter implements MapView.Presenter {
     for (int i = 0; i < cowNumber; i++) {
       placeCow();
     }
+    for (int i = 0; i < foodNumber; i++) {
+      placeFood();
+    }
+
     view.printMap(map);
     view.start();
   }
@@ -86,10 +90,12 @@ public class MapViewPresenter implements MapView.Presenter {
                                        .max(Comparator.comparingInt(Obstacle::getRow)).get().getRow();
           if (i > minRowOfColumn && j > minColumnOfRow && i < maxRowOfColumn && j < maxColumnOfRow) {
             if (map.get(i).get(j - 1).getSymbol() == '#' && map.get(i).getOrDefault(j + 1, null) != null &&
-                map.get(i - 1).get(j).getSymbol() == '#' && map.get(i + 1).get(j).getType().equals(Obstacle.class)) {
+                map.get(i - 1).get(j).getSymbol() == '#' && map.get(i + 1).get(j).getType().equals(Type.Obstacle)) {
               map.get(i).put(j, new NonUsable(i, j));
             } else {
-              map.get(i).put(j, new Empty(i, j));
+              Empty empty = new Empty(i, j);
+              map.get(i).put(j, empty);
+//              database.addEmpty(empty);
             }
           } else {
             map.get(i).put(j, new NonUsable(i, j));
@@ -103,7 +109,7 @@ public class MapViewPresenter implements MapView.Presenter {
     while (true) {
       int row = new Random().nextInt(firstMap.size());
       int column = new Random().nextInt(firstMap.get(0).size());
-      if (map.get(row).get(column).getType().equals(Empty.class)) {
+      if (map.get(row).get(column).getType().equals(Type.Empty)) {
         Farmer farmer = new Farmer(row, column);
         database.addFarmer(farmer);
         map.get(row).replace(column, farmer);
@@ -116,10 +122,23 @@ public class MapViewPresenter implements MapView.Presenter {
     while (true) {
       int row = new Random().nextInt(firstMap.size());
       int column = new Random().nextInt(firstMap.get(0).size());
-      if (map.get(row).get(column).getType().equals(Empty.class)) {
+      if (map.get(row).get(column).getType().equals(Type.Empty)) {
         Cow cow = new Cow(row, column);
         database.addCow(cow);
         map.get(row).replace(column, cow);
+        break;
+      }
+    }
+  }
+
+  private void placeFood() {
+    while (true) {
+      int row = new Random().nextInt(firstMap.size());
+      int column = new Random().nextInt(firstMap.get(0).size());
+      if (map.get(row).get(column).getType().equals(Type.Empty)) {
+        Food food = new Food(row, column);
+        database.addFood(food);
+        map.get(row).replace(column, food);
         break;
       }
     }
@@ -129,16 +148,16 @@ public class MapViewPresenter implements MapView.Presenter {
   public String getCowColor(int cowId) {
 
     Cow cow = database.getCows().stream()
-                         .filter(c -> c.getId() == cowId)
-                         .findFirst().get();
+                      .filter(c -> c.getId() == cowId)
+                      .findFirst().get();
 
     if (cow.getHungerBarLevel() == 0) {
       return ANSI_PURPLE + cow.getSymbol() + ANSI_RESET;
     } else if (cow.getHungerBarLevel() == 1) {
       return ANSI_RED + cow.getSymbol() + ANSI_RESET;
-    }else if (cow.getHungerBarLevel() == 2) {
+    } else if (cow.getHungerBarLevel() == 2) {
       return ANSI_YELLOW + cow.getSymbol() + ANSI_RESET;
-    }else if (cow.getHungerBarLevel() == 3) {
+    } else if (cow.getHungerBarLevel() == 3) {
       return ANSI_GREEN + cow.getSymbol() + ANSI_RESET;
     }
     return ANSI_WHITE + cow.getSymbol() + ANSI_RESET;
@@ -146,12 +165,43 @@ public class MapViewPresenter implements MapView.Presenter {
 
   @Override
   public void oneTurnPassed() {
+    oneTurnCow();
 
+
+    view.printMap(map);
   }
+
+  private void oneTurnCow(){
+    database.getCows().forEach(cow -> {
+      int nextRow = cow.getRow()+cow.getNextRow();
+      int nextColumn = cow.getColumn()+cow.getNextColumn();
+      int direction = cow.getDirection();
+
+      if (map.get(nextRow).get(nextColumn).getType().equals(Type.Food)) {
+        if (cow.getHungerBarLevel() < 3) {
+          cow.eatFood();
+          database.removeFood(map.get(nextRow).get(nextColumn).getId());
+          map.get(cow.getRow()).replace(cow.getColumn(), new Empty(cow.getRow(), cow.getColumn()));
+          map.get(nextRow).replace(nextColumn, cow);
+          cow.setRow(nextRow);
+          cow.setColumn(nextColumn);
+        } else {
+          cow.turn();
+        }
+      } else if (map.get(nextRow).get(nextColumn).getType().equals(Type.Empty)) {
+        map.get(cow.getRow()).replace(cow.getColumn(), new Empty(cow.getRow(), cow.getColumn()));
+        map.get(nextRow).replace(nextColumn, cow);
+        cow.setRow(nextRow);
+        cow.setColumn(nextColumn);
+      } else {
+        cow.turn();
+      }
+    });
+  }
+
 
   @Override
   public Map<Integer, Map<Integer, MapObject>> getMap() {
     return map;
   }
-
 }

@@ -7,10 +7,10 @@ public abstract class StationaryObject<T> implements MapObject<T> {
   private int id;
   private int row;
   private int column;
-  private Class<T> type;
+  private Type type;
   private char symbol;
 
-  public StationaryObject(int row, int column, Class<T> type, char symbol){
+  public StationaryObject(int row, int column, Type type, char symbol){
     this.id = new Random().nextInt(1000);
     this.row = row;
     this.column = column;
@@ -30,7 +30,7 @@ public abstract class StationaryObject<T> implements MapObject<T> {
     return id;
   }
 
-  public Class<T> getType(){
+  public Type getType(){
     return type;
   }
 
