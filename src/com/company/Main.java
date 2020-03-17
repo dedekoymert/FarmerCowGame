@@ -15,7 +15,7 @@ public class Main {
 //
 //      System.out.println(st);
 //    }
-    String mapPath = "/home/hive/dev/IdeaProjects/FarmerCowGame/map";
+    String mapPath = "map";
     int cowNumber = 2;
     int farmerNumber = 2;
     boolean stop = true;
