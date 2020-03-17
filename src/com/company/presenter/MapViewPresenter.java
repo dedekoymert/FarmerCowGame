@@ -166,7 +166,7 @@ public class MapViewPresenter implements MapView.Presenter {
   @Override
   public void oneTurnPassed() {
     oneTurnCow();
-
+    oneTurnFarmer();
 
     view.printMap(map);
   }
@@ -175,7 +175,6 @@ public class MapViewPresenter implements MapView.Presenter {
     database.getCows().forEach(cow -> {
       int nextRow = cow.getRow()+cow.getNextRow();
       int nextColumn = cow.getColumn()+cow.getNextColumn();
-      int direction = cow.getDirection();
 
       if (map.get(nextRow).get(nextColumn).getType().equals(Type.Food)) {
         if (cow.getHungerBarLevel() < 3) {
@@ -187,14 +186,40 @@ public class MapViewPresenter implements MapView.Presenter {
           cow.setColumn(nextColumn);
         } else {
           cow.turn();
+          cow.increaseHungerTurn();
         }
       } else if (map.get(nextRow).get(nextColumn).getType().equals(Type.Empty)) {
         map.get(cow.getRow()).replace(cow.getColumn(), new Empty(cow.getRow(), cow.getColumn()));
         map.get(nextRow).replace(nextColumn, cow);
         cow.setRow(nextRow);
         cow.setColumn(nextColumn);
+        cow.increaseHungerTurn();
       } else {
         cow.turn();
+        cow.increaseHungerTurn();
+      }
+    });
+  }
+
+  private void oneTurnFarmer() {
+    database.getFarmers().forEach(farmer -> {
+      int nextRow = farmer.getRow()+farmer.getNextRow();
+      int nextColumn = farmer.getColumn()+farmer.getNextColumn();
+
+      if (map.get(nextRow).get(nextColumn).getType().equals(Type.Cow)) {
+        farmer.increaseCowCaughtCount();
+        database.removeCow(map.get(nextRow).get(nextColumn).getId());
+        map.get(nextRow).replace(nextColumn, farmer);
+        map.get(farmer.getRow()).replace(farmer.getColumn(), new Empty(farmer.getRow(),farmer.getColumn()));
+        farmer.setRow(nextRow);
+        farmer.setColumn(nextColumn);
+      } else if (map.get(nextRow).get(nextColumn).getType().equals(Type.Empty)) {
+        map.get(nextRow).replace(nextColumn, farmer);
+        map.get(farmer.getRow()).replace(farmer.getColumn(), new Empty(farmer.getRow(), farmer.getColumn()));
+        farmer.setRow(nextRow);
+        farmer.setColumn(nextColumn);
+      } else {
+        farmer.turn();
       }
     });
   }

@@ -13,6 +13,7 @@ public class Farmer extends MovingObject<Farmer> {
 
   public void increaseCowCaughtCount(){
     caughtCowCount++;
+    setSymbol((char) (caughtCowCount+'0'));
   }
 
   public int getCaughtCowCount(){

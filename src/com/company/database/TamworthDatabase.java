@@ -27,4 +27,6 @@ public interface TamworthDatabase {
   List<Empty> getEmpties();
 
   void removeFood(int foodId);
+
+  void removeCow(int cowId);
 }

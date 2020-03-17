@@ -71,4 +71,8 @@ public class TamworthDatabaseImpl implements TamworthDatabase {
     foods.removeIf(f -> f.getId() == foodId);
   }
 
+  @Override
+  public void removeCow(int cowId) {
+    cows.removeIf(cow -> cow.getId() == cowId);
+  }
 }

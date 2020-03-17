@@ -16,10 +16,10 @@ public class Main {
 //      System.out.println(st);
 //    }
     String mapPath = "map";
-    int cowNumber = 2;
+    int cowNumber = 4;
     int farmerNumber = 2;
     boolean stop = true;
-    int foodNumber = 2;
+    int foodNumber = 4;
     new App(mapPath, cowNumber, farmerNumber, foodNumber, stop);
 
   }
