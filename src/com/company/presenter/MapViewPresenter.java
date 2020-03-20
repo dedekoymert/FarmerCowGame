@@ -167,8 +167,10 @@ public class MapViewPresenter implements MapView.Presenter {
   public void oneTurnPassed() {
     oneTurnCow();
     oneTurnFarmer();
-
     view.printMap(map);
+    if (database.getCows().size() == 0) {
+      System.exit(0);
+    }
   }
 
   private void oneTurnCow(){

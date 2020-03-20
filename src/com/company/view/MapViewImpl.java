@@ -13,8 +13,8 @@ public class MapViewImpl implements MapView {
   private boolean stop;
   private Presenter presenter;
   private List<List<Character>> firstMap;
+  private int numberOfTurns = 0;
 
-//    System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
 
   public MapViewImpl(boolean stop) throws IOException {
     this.stop = stop;
@@ -22,14 +22,30 @@ public class MapViewImpl implements MapView {
 
   @Override
   public void start() {
+    System.out.println("Enter 1 for next turn");
+    System.out.println("Enter 0 to finish");
+
     if (stop) {
       Scanner input = new Scanner(System.in);
       String goOn = input.next();
-      while (goOn.equals("1")) {
 
+      while (goOn.equals("1")) {
         presenter.oneTurnPassed();
+        numberOfTurns++;
 
         goOn = input.next();
+        if (goOn.equals("0")) {
+          break;
+        }
+      }
+    }
+
+    while (true) {
+      presenter.oneTurnPassed();
+      numberOfTurns++;
+      if(numberOfTurns > (firstMap.size()*firstMap.size())) {
+        System.out.println("Farmers can not catch cows");
+        System.exit(0);
       }
     }
   }
