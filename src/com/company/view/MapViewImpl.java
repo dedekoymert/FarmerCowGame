@@ -30,8 +30,8 @@ public class MapViewImpl implements MapView {
       String goOn = input.next();
 
       while (goOn.equals("1")) {
-        presenter.oneTurnPassed();
         numberOfTurns++;
+        presenter.oneTurnPassed();
 
         goOn = input.next();
         if (goOn.equals("0")) {
