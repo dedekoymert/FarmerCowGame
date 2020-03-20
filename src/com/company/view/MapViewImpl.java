@@ -43,7 +43,7 @@ public class MapViewImpl implements MapView {
     while (true) {
       presenter.oneTurnPassed();
       numberOfTurns++;
-      if(numberOfTurns > (firstMap.size()*firstMap.size())) {
+      if(numberOfTurns > (firstMap.size()*firstMap.get(0).size())) {
         System.out.println("Farmers can not catch cows");
         System.exit(0);
       }
@@ -57,6 +57,7 @@ public class MapViewImpl implements MapView {
 
 
   public void printMap(Map<Integer, Map<Integer, MapObject>> map) {
+    System.out.println("Turn: "+ numberOfTurns);
     for (int i = 0; i < firstMap.size(); i++) {
       for (int j = 0; j < firstMap.get(i).size(); j++) {
         if (map.get(i).get(j).getType().equals(Type.Cow)) {
